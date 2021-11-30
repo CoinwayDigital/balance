@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model exchanges {
+  id                  String  @id
+  name                String
+  exchange_key        String  @unique
+  api_public          String?
+  api_secret          String?
+  api_uid             String?
+  api_password        String?
+  api_configuration   Json?
+  min_order_usd_value Float?
+  status              String  @default("active")
+  methods             Json?
+  fee_proportional    Float?  @default(0)
+  fee_currency        String?
+}
+
+model refresh_token {
+  id        String @id
+  expiresIn Int
+  userId    String @unique
+  users     users  @relation(fields: [userId], references: [id])
+}
+
+model users {
+  id            String         @id
+  name          String?
+  username      String         @unique
+  password      String
+  refresh_token refresh_token?
+}

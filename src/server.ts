@@ -1,12 +1,9 @@
-import express from 'express'
-import db from '@src/infra'
+import { client } from '@src/prisma/client'
 
-const app = express()
-app.get('/', (request, response) => {
-  return response.json({
-    message: 'Hello World!',
-    database: db()
-  })
-})
 
-app.listen(8080)
+const main = async () => {
+  const test = await client.users.findFirst()
+  console.log(test)
+}
+
+main()
