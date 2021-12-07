@@ -6,7 +6,7 @@
   "author": "Victor Lima <victorandradelima@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node-modules --no-notify src/server.ts",
+    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node-modules --no-notify src/worker/server.ts",
     "start": "pm2 start ecosystem.config.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "test": "jest"
@@ -17,6 +17,9 @@
     "@babel/node": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
+    "@types/axios": "^0.14.0",
+    "@types/crypto-js": "^4.0.2",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
@@ -36,6 +39,11 @@
   },
   "dependencies": {
     "@prisma/client": "3.6.0",
+    "axios": "^0.24.0",
+    "ccxt": "^1.62.63",
+    "crypto-js": "^4.1.1",
+    "dayjs": "^1.10.7",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1"
   }
 }
