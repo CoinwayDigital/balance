@@ -1,6 +1,9 @@
 import { AxiosInstance } from "axios"
 
 const setUsdValues = async (exchangeSelected: string, filteredBalance: Balances, filteredBalanceIds: string, api: AxiosInstance) => {
+  // Para retornar a soma de todos os valores em USD encontrados
+  let usdValueTotal: number = 0
+
   console.log(`[coinway-balance] ${exchangeSelected} - Serching USD Values ...`)
   const coinPrices = await api.get(`coin/price?ids=${filteredBalanceIds}&vsCurrencies=usd`)
     .then(response => response.data)
@@ -29,11 +32,17 @@ const setUsdValues = async (exchangeSelected: string, filteredBalance: Balances,
           ...filteredBalance[b],
           usdValue: coinPrices[c].usd * filteredBalance[b].total
         }
+
+        usdValueTotal = usdValueTotal + filteredBalance[b].usdValue
+
       }
     }
   }
   global.detailedConsole && console.log(`[coinway-balance] ${exchangeSelected} - Set USD Values done`)
-  return filteredBalance
+  return {
+    filteredBalance,
+    usdValueTotal
+  }
 }
 
 export default setUsdValues
