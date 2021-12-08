@@ -69,7 +69,7 @@ const main = async () => {
     } else {
       console.log('Error to save new balance')
     }
-    await sleep(10000)
+    await sleep(parseInt(process.env.LOOP))
   }
 }
 

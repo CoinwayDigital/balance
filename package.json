@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node-modules --no-notify src/worker/server.ts",
-    "start": "pm2 start ecosystem.config.js",
+    "start": "node -r dotenv/config -r tsconfig-paths/register dist/worker/server.js",
+    "pm2": "pm2 start ecosystem.config.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "test": "jest"
   },
