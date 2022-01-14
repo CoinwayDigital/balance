@@ -1,9 +1,10 @@
 import { AxiosInstance } from "axios"
 
-const setBalance = async (balance: any, api: AxiosInstance): Promise<any> => {
+const setBalance = async (balance: any, api: AxiosInstance, solanaBalance?: any): Promise<any> => {
 
   const apiResponse = await api.post('balance/create', {
-    balance: balance
+    balance: balance,
+    solanaBalance: solanaBalance
   })
     .then(response => {
       return response.data

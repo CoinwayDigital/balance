@@ -10,6 +10,7 @@ import { AxiosInstance } from 'axios'
 import getExchangeKeys from './exchange/getExchangeKeys'
 import sleep from '@src/utils/sleep'
 import setBalance from './api/setBalance'
+import getSolanaBalance from './solana/getSolanaBalance'
 
 global.authenticateData = undefined
 global.detailedConsole = false
@@ -20,7 +21,7 @@ const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
   let filteredBalance = await fetchExchangeBalance(exchangeData, exchangeSelected, api)
   const { filteredBalanceWithIds, filteredBalanceIds } = await setCoingeckoIds(exchangeSelected, filteredBalance, coinList)
   const finalBalance = await setUsdValues(exchangeSelected, filteredBalanceWithIds, filteredBalanceIds, api)
-  console.log(`Final balance of ${exchangeSelected}`)
+  console.log(`[coinway-balance] Final balance of ${exchangeSelected}\n`)
   return finalBalance
 }
 
@@ -30,8 +31,10 @@ const loopBalance = async () => {
   await loginApi()
   const api = coinwayApi()
   global.detailedConsole && console.log(`[coinway-balance] Login Done`)
-  await checkerExpire()
+  await checkerExpire() // Check authentication
 
+
+  // Inicio do levantamento de Balance das Exchanges
   const exchangeKeys = await getExchangeKeys(api)
 
   let exchangesBalance: object = {}
@@ -49,10 +52,16 @@ const loopBalance = async () => {
     exchanges: exchangesBalance,
     usdTotal
   }
+  // Final do Balance das Exchanges
+
+
+  const solanaBalance = await getSolanaBalance(api, process.env.SOLANA_WALLET)
+
 
   return {
     balance,
-    api
+    api,
+    solanaBalance
   }
 
 }
@@ -61,8 +70,8 @@ const main = async () => {
   console.clear()
   console.log('|||| Araucária Capital - Balance Project ||||')
   while (true) {
-    const { balance, api } = await loopBalance()
-    const newBalance = await setBalance(balance, api)
+    const { balance, api, solanaBalance } = await loopBalance()
+    const newBalance = await setBalance(balance, api, solanaBalance)
     if (newBalance) {
       console.log('New Balance create success!')
       console.log(newBalance)
