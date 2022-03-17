@@ -11,6 +11,7 @@ import getExchangeKeys from './exchange/getExchangeKeys'
 import sleep from '@src/utils/sleep'
 import setBalance from './api/setBalance'
 import getSolanaBalance from './solana/getSolanaBalance'
+import getOtherBalanceData from './otherBalance/getOtherBalanceData'
 
 global.authenticateData = undefined
 global.detailedConsole = false
@@ -21,16 +22,16 @@ const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
   let filteredBalance = await fetchExchangeBalance(exchangeData, exchangeSelected, api)
   const { filteredBalanceWithIds, filteredBalanceIds } = await setCoingeckoIds(exchangeSelected, filteredBalance, coinList)
   const finalBalance = await setUsdValues(exchangeSelected, filteredBalanceWithIds, filteredBalanceIds, api)
-  console.log(`[coinway-balance] Final balance of ${exchangeSelected}\n`)
+  console.log(`[araucaria-balance] Final balance of ${exchangeSelected}\n`)
   return finalBalance
 }
 
 const loopBalance = async () => {
   console.log('\n')
-  console.log(`[coinway-balance] Login Coinway API ...`)
+  console.log(`[araucaria-balance] Login Araucaria API ...`)
   await loginApi()
   const api = coinwayApi()
-  global.detailedConsole && console.log(`[coinway-balance] Login Done`)
+  global.detailedConsole && console.log(`[araucaria-balance] Login Done`)
   await checkerExpire() // Check authentication
 
 
@@ -54,6 +55,8 @@ const loopBalance = async () => {
   }
   // Final do Balance das Exchanges
 
+  // Inicio do levantamento de Outros Saldos
+  const otherBalance = await getOtherBalanceData(api)
 
   const solanaBalance = await getSolanaBalance(api, process.env.SOLANA_WALLET)
 
@@ -61,7 +64,8 @@ const loopBalance = async () => {
   return {
     balance,
     api,
-    solanaBalance
+    solanaBalance,
+    otherBalance
   }
 
 }

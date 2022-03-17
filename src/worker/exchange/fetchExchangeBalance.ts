@@ -8,7 +8,7 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
     secret: decrypt(exchangeData.api_secret)
   })
 
-  console.log(`[coinway-balance] ${exchangeSelected} - Searching exchange balance ...`)
+  console.log(`[araucaria-balance] ${exchangeSelected} - Searching exchange balance ...`)
   const balance = await exchange.fetchBalance()
     .then(response => {
       return response
@@ -17,10 +17,10 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
       console.log(error.message)
       return null
     })
-  global.detailedConsole && console.log(`[coinway-balance] ${exchangeSelected} - Search balance done`)
+  global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Search balance done`)
   global.detailedConsole && console.log('\n')
 
-  console.log(`[coinway-balance] ${exchangeSelected} - Filter non zero balances ...`)
+  console.log(`[araucaria-balance] ${exchangeSelected} - Filter non zero balances ...`)
   let filteredBalance: Balances = {}
 
   for (const key in balance) {
@@ -32,7 +32,7 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
       }
     }
   }
-  global.detailedConsole && console.log(`[coinway-balance] ${exchangeSelected} - Filter balance done`)
+  global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Filter balance done`)
   global.detailedConsole && console.log(filteredBalance)
   global.detailedConsole && console.log('\n')
 

@@ -4,17 +4,17 @@ const setUsdValues = async (exchangeSelected: string, filteredBalance: Balances,
   // Para retornar a soma de todos os valores em USD encontrados
   let usdValueTotal: number = 0
 
-  console.log(`[coinway-balance] ${exchangeSelected} - Serching USD Values ...`)
+  console.log(`[araucaria-balance] ${exchangeSelected} - Serching USD Values ...`)
   const coinPrices = await api.get(`coin/price?ids=${filteredBalanceIds}&vsCurrencies=usd`)
     .then(response => response.data)
     .catch(error => {
       console.log(error.message)
     })
 
-  global.detailedConsole && console.log(`[coinway-balance] ${exchangeSelected} - Serch USD Values done`)
+  global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Serch USD Values done`)
   global.detailedConsole && console.log('\n')
 
-  console.log(`[coinway-balance] ${exchangeSelected} - Setting USD Values ...`)
+  console.log(`[araucaria-balance] ${exchangeSelected} - Setting USD Values ...`)
   for (const b in filteredBalance) {
     for (const c in coinPrices) {
 
@@ -38,7 +38,7 @@ const setUsdValues = async (exchangeSelected: string, filteredBalance: Balances,
       }
     }
   }
-  global.detailedConsole && console.log(`[coinway-balance] ${exchangeSelected} - Set USD Values done`)
+  global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Set USD Values done`)
   return {
     filteredBalance,
     usdValueTotal
