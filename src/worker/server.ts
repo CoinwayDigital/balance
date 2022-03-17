@@ -60,7 +60,6 @@ const loopBalance = async () => {
 
   const solanaBalance = await getSolanaBalance(api, process.env.SOLANA_WALLET)
 
-
   return {
     balance,
     api,
@@ -74,8 +73,8 @@ const main = async () => {
   console.clear()
   console.log('|||| Araucária Capital - Balance Project ||||')
   while (true) {
-    const { balance, api, solanaBalance } = await loopBalance()
-    const newBalance = await setBalance(balance, api, solanaBalance)
+    const { balance, api, solanaBalance, otherBalance } = await loopBalance()
+    const newBalance = await setBalance(balance, api, solanaBalance, otherBalance)
     if (newBalance) {
       console.log('New Balance create success!')
       console.log(newBalance)
