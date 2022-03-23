@@ -12,6 +12,7 @@ import sleep from '@src/utils/sleep'
 import setBalance from './api/setBalance'
 import getSolanaBalance from './solana/getSolanaBalance'
 import getOtherBalanceData from './otherBalance/getOtherBalanceData'
+import getPriceUsdBrl from './priceUsdBrl/getPriceUsdBrl'
 
 global.authenticateData = undefined
 global.detailedConsole = false
@@ -60,11 +61,15 @@ const loopBalance = async () => {
 
   const solanaBalance = await getSolanaBalance(api, process.env.SOLANA_WALLET)
 
+  const priceUsdBrl = await getPriceUsdBrl(api)
+  console.log(priceUsdBrl)
+
   return {
     balance,
     api,
     solanaBalance,
-    otherBalance
+    otherBalance,
+    priceUsdBrl
   }
 
 }
@@ -73,8 +78,8 @@ const main = async () => {
   console.clear()
   console.log('|||| Araucária Capital - Balance Project ||||')
   while (true) {
-    const { balance, api, solanaBalance, otherBalance } = await loopBalance()
-    const newBalance = await setBalance(balance, api, solanaBalance, otherBalance)
+    const { balance, api, solanaBalance, otherBalance, priceUsdBrl } = await loopBalance()
+    const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, priceUsdBrl)
     if (newBalance) {
       console.log('New Balance create success!')
       console.log(newBalance)

@@ -7,7 +7,7 @@ const getSolanaBalance = async (api: AxiosInstance, solanaWallet: string): Promi
       return response.data
     })
     .catch(error => {
-      console.log(error)
+      console.log(error.message)
       return undefined
     })
 
