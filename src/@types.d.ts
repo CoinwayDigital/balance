@@ -15,3 +15,8 @@ type Coin = {
   name: string
   symbol: string
 }
+
+type TInvestmentData = {
+  investmentsAmountUsd: number
+  investmentsAmountBrl: number
+}
