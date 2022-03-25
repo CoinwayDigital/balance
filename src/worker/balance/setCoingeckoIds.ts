@@ -5,11 +5,13 @@ const setCoingeckoIds = async (exchangeSelected: string, filteredBalance: Balanc
   coinList.map(coin => {
     for (const key in filteredBalance) {
       if (key.toLowerCase() === coin.symbol) {
-        filteredBalance[key] = {
-          ...filteredBalance[key],
-          coinGeckoId: coin.id
+        if (!filteredBalance[key].coinGeckoId) {
+          filteredBalance[key] = {
+            ...filteredBalance[key],
+            coinGeckoId: coin.id
+          }
+          filteredBalanceIds = filteredBalanceIds.concat(coin.id, ',')
         }
-        filteredBalanceIds = filteredBalanceIds.concat(coin.id, ',')
       }
     }
   })

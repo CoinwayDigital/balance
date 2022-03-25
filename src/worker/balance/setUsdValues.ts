@@ -30,14 +30,14 @@ const setUsdValues = async (exchangeSelected: string, filteredBalance: Balances,
           coinGeckoId: 'stable-dollar'
         } : {
           ...filteredBalance[b],
-          usdValue: coinPrices[c].usd * filteredBalance[b].total
+          usdValue: filteredBalance[b].usdValue ? filteredBalance[b].usdValue : (coinPrices[c].usd * filteredBalance[b].total)
         }
 
         usdValueTotal = usdValueTotal + filteredBalance[b].usdValue
-
       }
     }
   }
+
   global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Set USD Values done`)
   return {
     filteredBalance,

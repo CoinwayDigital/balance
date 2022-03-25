@@ -17,6 +17,9 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
       console.log(error.message)
       return null
     })
+
+  const nativeBalance = balance.info.result ? balance.info.result as Array<any> : []
+
   global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Search balance done`)
   global.detailedConsole && console.log('\n')
 
@@ -32,6 +35,18 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
       }
     }
   }
+
+  if (nativeBalance) {
+    for (let i = 0; i < nativeBalance.length; i++) {
+      if (nativeBalance[i].coin in filteredBalance) {
+        filteredBalance[nativeBalance[i].coin] = {
+          ...filteredBalance[nativeBalance[i].coin],
+          usdValue: parseFloat(nativeBalance[i].usdValue)
+        }
+      }
+    }
+  }
+
   global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Filter balance done`)
   global.detailedConsole && console.log(filteredBalance)
   global.detailedConsole && console.log('\n')
