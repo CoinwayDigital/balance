@@ -64,7 +64,7 @@ const loopBalance = async () => {
 
   const priceUsdBrl = await getPriceUsdBrl(api)
 
-  const investmentsAmount = await getInvestmentData(api, priceUsdBrl)
+  const investmentsAmount = await getInvestmentData(api, priceUsdBrl ? priceUsdBrl : 1)
 
   return {
     balance,
@@ -83,7 +83,7 @@ const main = async () => {
   console.log('|||| Araucária Capital - Balance Project ||||')
   while (true) {
     const { balance, api, solanaBalance, otherBalance, priceUsdBrl, investmentsAmountUsd, investmentsAmountBrl } = await loopBalance()
-    const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, priceUsdBrl, investmentsAmountUsd, investmentsAmountBrl)
+    const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, (priceUsdBrl ? priceUsdBrl : 1), investmentsAmountUsd, investmentsAmountBrl)
     if (newBalance) {
       console.log('New Balance create success!')
       console.log(newBalance)
