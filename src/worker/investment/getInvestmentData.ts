@@ -16,10 +16,9 @@ const getInvestmentData = async (api: AxiosInstance, usdBrlPrice: number): Promi
   for (let i = 0; i < investmentsResponse.length; i++) {
     if (investmentsResponse[i].amount_usd && investmentsResponse[i].usd_brl_price) {
       investmentsAmountBrl = investmentsAmountBrl + (investmentsResponse[i].amount_usd * investmentsResponse[i].usd_brl_price)
+      investmentsAmountUsd = investmentsAmountUsd + investmentsResponse[i].amount_usd
     }
   }
-
-  investmentsAmountUsd = investmentsAmountBrl / usdBrlPrice
 
   return {
     investmentsAmountUsd,
