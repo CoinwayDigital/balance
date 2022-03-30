@@ -60,7 +60,7 @@ const loopBalance = async () => {
   // Inicio do levantamento de Outros Saldos
   const otherBalance = await getOtherBalanceData(api)
 
-  const solanaBalance = await getSolanaBalance(api, process.env.SOLANA_WALLET)
+  const solanaBalance = undefined // await getSolanaBalance(api, process.env.SOLANA_WALLET)
 
   const priceUsdBrl = await getPriceUsdBrl(api)
 
