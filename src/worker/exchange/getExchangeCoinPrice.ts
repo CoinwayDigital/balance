@@ -1,7 +1,7 @@
 import sleep from "@src/utils/sleep"
 import { AxiosInstance } from "axios"
 
-const usdSymbols = ['USD', 'USDT', 'USDC', 'TUSD', 'GUSD', 'BUSD', 'LDUSDT', 'SRM_LOCKED']
+const usdSymbols = ['USD', 'USDT', 'USDC', 'TUSD', 'GUSD', 'BUSD', 'LDUSDT', 'SRM_LOCKED', 'LUNC']
 
 const getExchangeCoinPrice = async (exchangeSelected: string, filteredBalance: Balances, api: AxiosInstance) => {
     console.log(`[araucaria-balance] ${exchangeSelected} - Get pair price`)
