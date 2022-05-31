@@ -15,6 +15,7 @@ import setBalance from './api/setBalance'
 import getOtherBalanceData from './otherBalance/getOtherBalanceData'
 import getPriceUsdBrl from './priceUsdBrl/getPriceUsdBrl'
 import getInvestmentData from './investment/getInvestmentData'
+import getBookReport from './book/getBookReport'
 
 global.authenticateData = undefined
 global.detailedConsole = false
@@ -79,6 +80,8 @@ const loopBalance = async () => {
     const priceUsdBrl = await getPriceUsdBrl(api)
   
     const investmentsAmount = await getInvestmentData(api, priceUsdBrl ? priceUsdBrl : 1)
+
+    const cashbookReport = await getBookReport(api)
   
     return {
       status,
@@ -88,7 +91,8 @@ const loopBalance = async () => {
       otherBalance,
       priceUsdBrl,
       investmentsAmountUsd: investmentsAmount.investmentsAmountUsd,
-      investmentsAmountBrl: investmentsAmount.investmentsAmountBrl
+      investmentsAmountBrl: investmentsAmount.investmentsAmountBrl,
+      cashbookReport
     }
   }
 
@@ -103,9 +107,9 @@ const main = async () => {
   console.log('|||| Araucária Capital - Balance Project ||||')
 
   while (true) {
-    const { status, balance, api, solanaBalance, otherBalance, priceUsdBrl, investmentsAmountUsd, investmentsAmountBrl } = await loopBalance()
+    const { status, balance, api, solanaBalance, otherBalance, priceUsdBrl, investmentsAmountUsd, investmentsAmountBrl, cashbookReport } = await loopBalance()
     if(status){
-      const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, (priceUsdBrl ? priceUsdBrl : 1), investmentsAmountUsd, investmentsAmountBrl)
+      const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, (priceUsdBrl ? priceUsdBrl : 1), investmentsAmountUsd, investmentsAmountBrl, cashbookReport)
       if (newBalance) {
         console.log('[araucaria-balance] New Balance create success!')
         console.log(newBalance)

@@ -7,7 +7,8 @@ const setBalance = async (
   otherBalance?: any,
   priceUsdBrl?: number,
   investmentsAmountUsd?: number,
-  investmentsAmountBrl?: number): Promise<any> => {
+  investmentsAmountBrl?: number,
+  cashbookReport?: any): Promise<any> => {
   const apiResponse = await api.post('balance/create', {
     balance: balance,
     solanaBalance: solanaBalance,
@@ -15,6 +16,7 @@ const setBalance = async (
     priceUsdBrl: priceUsdBrl,
     investmentsAmountUsd: investmentsAmountUsd,
     investmentsAmountBrl: investmentsAmountBrl,
+    book: cashbookReport
   })
     .then(response => {
       return response.data
