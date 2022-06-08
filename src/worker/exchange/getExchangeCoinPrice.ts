@@ -29,11 +29,13 @@ const getExchangeCoinPrice = async (exchangeSelected: string, filteredBalance: B
                     global.detailedConsole && console.log(symbol, exchangePairPrice.pair, exchangePairPrice.price, filteredBalance[key].usdValue)
                 } else {
                     console.log(`[araucaria-balance] ${exchangeSelected} - Erro to receveid ${key} prices`)
-                    status = false
+                    filteredBalance[key].usdValue = 0
+                    // status = false
                 }
             } else {
                 console.log(`[araucaria-balance] ${exchangeSelected} - No received pair price: ${symbol}`)
-                status = false
+                filteredBalance[key].usdValue = 0
+                // status = false
             }
         }
     }
