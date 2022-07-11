@@ -16,6 +16,7 @@ import getOtherBalanceData from './otherBalance/getOtherBalanceData'
 import getPriceUsdBrl from './priceUsdBrl/getPriceUsdBrl'
 import getInvestmentData from './investment/getInvestmentData'
 import getBookReport from './book/getBookReport'
+import getPriceUsdRatio from './priceUsdRatio/getPriceUsdRatio'
 
 global.authenticateData = undefined
 global.detailedConsole = false
@@ -78,10 +79,14 @@ const loopBalance = async () => {
     const solanaBalance = undefined // await getSolanaBalance(api, process.env.SOLANA_WALLET)
   
     const priceUsdBrl = await getPriceUsdBrl(api)
-  
+    
+    const priceUsdRatio = await getPriceUsdRatio(api)
+    status = priceUsdRatio ? true : false
+
     const investmentsAmount = await getInvestmentData(api, priceUsdBrl ? priceUsdBrl : 1)
 
     const cashbookReport = await getBookReport(api)
+
   
     return {
       status,
@@ -90,6 +95,7 @@ const loopBalance = async () => {
       solanaBalance,
       otherBalance,
       priceUsdBrl,
+      priceUsdRatio,
       investmentsAmountUsd: investmentsAmount.investmentsAmountUsd,
       investmentsAmountBrl: investmentsAmount.investmentsAmountBrl,
       cashbookReport
@@ -107,9 +113,9 @@ const main = async () => {
   console.log('|||| Araucária Capital - Balance Project ||||')
 
   while (true) {
-    const { status, balance, api, solanaBalance, otherBalance, priceUsdBrl, investmentsAmountUsd, investmentsAmountBrl, cashbookReport } = await loopBalance()
+    const { status, balance, api, solanaBalance, otherBalance, priceUsdBrl, priceUsdRatio, investmentsAmountUsd, investmentsAmountBrl, cashbookReport } = await loopBalance()
     if(status){
-      const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, (priceUsdBrl ? priceUsdBrl : 1), investmentsAmountUsd, investmentsAmountBrl, cashbookReport)
+      const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, (priceUsdBrl ? priceUsdBrl : 1), priceUsdRatio, investmentsAmountUsd, investmentsAmountBrl, cashbookReport)
       if (newBalance) {
         console.log('[araucaria-balance] New Balance create success!')
         console.log(newBalance)

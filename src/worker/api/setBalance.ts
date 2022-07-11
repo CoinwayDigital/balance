@@ -6,6 +6,7 @@ const setBalance = async (
   solanaBalance?: any,
   otherBalance?: any,
   priceUsdBrl?: number,
+  priceUsdRatio?: number,
   investmentsAmountUsd?: number,
   investmentsAmountBrl?: number,
   cashbookReport?: any): Promise<any> => {
@@ -14,6 +15,7 @@ const setBalance = async (
     solanaBalance: solanaBalance,
     otherBalance: otherBalance,
     priceUsdBrl: priceUsdBrl,
+    priceUsdRatio: priceUsdRatio,
     investmentsAmountUsd: investmentsAmountUsd,
     investmentsAmountBrl: investmentsAmountBrl,
     book: cashbookReport
