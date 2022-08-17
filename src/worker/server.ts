@@ -17,9 +17,13 @@ import getPriceUsdBrl from './priceUsdBrl/getPriceUsdBrl'
 import getInvestmentData from './investment/getInvestmentData'
 import getBookReport from './book/getBookReport'
 import getPriceUsdRatio from './priceUsdRatio/getPriceUsdRatio'
+import getUpdateBalance from './settings/getUpdateBalance'
+import setUpdateBalance from './settings/setUpdateBalance'
 
 global.authenticateData = undefined
 global.detailedConsole = false
+const loopLoginTime = 360000
+const loopTriggerUpdateTime = 5000
 
 const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
   const exchangeData = await getExchangeData(exchangeSelected, api)
@@ -39,10 +43,8 @@ const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
 
 const loopBalance = async () => {
   console.log('\n')
-  console.log(`[araucaria-balance] Login Araucaria API ...`)
   await loginApi()
   const api = coinwayApi()
-  global.detailedConsole && console.log(`[araucaria-balance] Login Done`)
   await checkerExpire() // Check authentication
 
   let status = true
@@ -108,12 +110,8 @@ const loopBalance = async () => {
   }
 }
 
-const main = async () => {
-  console.clear()
-  console.log('|||| Araucária Capital - Balance Project ||||')
-
-  while (true) {
-    const { status, balance, api, solanaBalance, otherBalance, priceUsdBrl, priceUsdRatio, investmentsAmountUsd, investmentsAmountBrl, cashbookReport } = await loopBalance()
+const newBalance = async () => {
+  const { status, balance, api, solanaBalance, otherBalance, priceUsdBrl, priceUsdRatio, investmentsAmountUsd, investmentsAmountBrl, cashbookReport } = await loopBalance()
     if(status){
       const newBalance = await setBalance(balance, api, solanaBalance, otherBalance, (priceUsdBrl ? priceUsdBrl : 1), priceUsdRatio, investmentsAmountUsd, investmentsAmountBrl, cashbookReport)
       if (newBalance) {
@@ -125,9 +123,54 @@ const main = async () => {
     } else {
       console.log('[araucaria-balance] Error to get some balance')
     }
-    console.log('[araucaria-balance] END LOOP')
+}
+
+const loopTriggerUpdate = async () => {
+  while (true) {
+    const api = coinwayApi()
+    const updateBalance = await getUpdateBalance(api)
+    if(updateBalance){
+      console.log('[araucaria-balance] Enter on Trigger Balance of Update Balance Settings')
+      await newBalance()
+      await sleep(loopTriggerUpdateTime)
+      await setUpdateBalance(api, false)
+    }
+    await sleep(loopTriggerUpdateTime)
+  }
+}     
+
+const loopNewBalance = async () => {
+  while (true) {
+    console.log('[araucaria-balance] New Balance - INIT LOOP')
+    await newBalance()
+    console.log('[araucaria-balance] New Balance - END LOOP')
     await sleep(parseInt(process.env.LOOP))
   }
+}
+
+const loopLoginApi = async (isUniqueLoop: boolean) => {
+  if(isUniqueLoop){
+    console.log('[araucaria-balance] LOGIN - Is unique login ')
+    await loginApi()
+    global.detailedConsole && console.log(`[araucaria-balance] Login Done`)
+  } else {
+    while (true) {
+      console.log('[araucaria-balance] LOGIN - Init login loop')
+      await sleep(loopLoginTime)
+      console.log(`[araucaria-balance] Login Araucaria API ...`)
+      await loginApi()  
+      global.detailedConsole && console.log(`[araucaria-balance] Login Done`)
+    }
+  }
+}
+
+const main = async () => {
+  console.clear()
+  console.log('|||| Araucária Capital - Balance Project ||||')
+  await loopLoginApi(true)
+  loopLoginApi(false)
+  loopTriggerUpdate()
+  loopNewBalance()
 }
 
 main()
