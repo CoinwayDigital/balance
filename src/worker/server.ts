@@ -22,7 +22,7 @@ import setUpdateBalance from './settings/setUpdateBalance'
 
 global.authenticateData = undefined
 global.detailedConsole = false
-const loopLoginTime = 360000
+const loopLoginTime = 120000
 const loopTriggerUpdateTime = 5000
 
 const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
@@ -43,7 +43,7 @@ const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
 
 const loopBalance = async () => {
   console.log('\n')
-  await loginApi()
+  // await loginApi()
   const api = coinwayApi()
   await checkerExpire() // Check authentication
 
