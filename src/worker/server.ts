@@ -5,7 +5,6 @@ import getExchangeData from './exchange/getExchangeData'
 import fetchExchangeBalance from './exchange/fetchExchangeBalance'
 import getExchangeCoinPrice from './exchange/getExchangeCoinPrice'
 import getCoinSelect from './coin/getCoinSelect'
-import setCoingeckoIds from './balance/setCoingeckoIds'
 import setUsdValues from './balance/setUsdValues'
 import { AxiosInstance } from 'axios'
 import getExchangeKeys from './exchange/getExchangeKeys'
@@ -22,7 +21,7 @@ import setUpdateBalance from './settings/setUpdateBalance'
 
 global.authenticateData = undefined
 global.detailedConsole = false
-const loopLoginTime = 120000
+const loopLoginTime = 240000
 const loopTriggerUpdateTime = 5000
 
 const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
@@ -43,7 +42,6 @@ const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
 
 const loopBalance = async () => {
   console.log('\n')
-  // await loginApi()
   const api = coinwayApi()
   await checkerExpire() // Check authentication
 
@@ -77,16 +75,11 @@ const loopBalance = async () => {
   
     // Inicio do levantamento de Outros Saldos
     const otherBalance = await getOtherBalanceData(api)
-  
     const solanaBalance = undefined // await getSolanaBalance(api, process.env.SOLANA_WALLET)
-  
     const priceUsdBrl = await getPriceUsdBrl(api)
-    
     const priceUsdRatio = await getPriceUsdRatio(api)
     status = priceUsdRatio ? true : false
-
     const investmentsAmount = await getInvestmentData(api, priceUsdBrl ? priceUsdBrl : 1)
-
     const cashbookReport = await getBookReport(api)
 
   
@@ -159,7 +152,7 @@ const loopLoginApi = async (isUniqueLoop: boolean) => {
       await sleep(loopLoginTime)
       console.log(`[araucaria-balance] Login Araucaria API ...`)
       await loginApi()  
-      global.detailedConsole && console.log(`[araucaria-balance] Login Done`)
+      console.log(`[araucaria-balance] Login Done`)
     }
   }
 }

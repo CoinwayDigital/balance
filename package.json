@@ -23,6 +23,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
+    "@types/nodemailer": "^6.4.5",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^5.0.0",
     "babel-plugin-module-resolver": "^4.1.0",
@@ -45,6 +46,7 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemailer": "^6.7.8"
   }
 }
