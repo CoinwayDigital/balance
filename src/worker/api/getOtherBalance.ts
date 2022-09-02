@@ -11,7 +11,21 @@ const getOtherBalance = async (api: AxiosInstance): Promise<any> => {
       return undefined
     })
 
-  return apiResponse
+  const filterOtherBalance = []
+
+  for (let i = 0; i < apiResponse.length; i++) {
+    filterOtherBalance.push({
+      id: apiResponse[i].id,
+      date: apiResponse[i].date,
+      label: apiResponse[i].label,
+      status: apiResponse[i].status,
+      amount: apiResponse[i].amount,
+      currency: apiResponse[i].currency,
+      obs: apiResponse[i].obs
+    })
+  }
+
+  return filterOtherBalance
 }
 
 export default getOtherBalance

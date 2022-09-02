@@ -39,28 +39,14 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
         otherBalanceUsdConvert.push({
           ...otherBalanceResponse[i],
           amount: otherBalanceResponse[i].amount / usdBrlPrice,
-          currency: 'usd',
-          log: null
+          currency: 'usd'
         })
       } else if (otherBalanceResponse[i].currency === 'usd') {
         sumUsdAmount = sumUsdAmount + otherBalanceResponse[i].amount
         sumBrlAmount = (sumBrlAmount + (otherBalanceResponse[i].amount * usdBrlPrice))
-        otherBalanceUsdConvert.push({
-          ...otherBalanceResponse[i],
-          log: null
-        })
+        otherBalanceUsdConvert.push(otherBalanceResponse[i])
       }
     }
-
-    //Pegando apenas os dados necessários do OtherBalance
-    const filterOtherBalance = []
-    for (let i = 0; i < otherBalanceResponse.length; i++) {
-      filterOtherBalance.push({
-        ...otherBalanceResponse,
-        log: null
-      })
-    }
-
 
     const otherBalance = {
       status: 'success',
@@ -69,7 +55,7 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
         usd: sumUsdAmount,
         brl: sumBrlAmount
       },
-      otherBalance: filterOtherBalance,
+      otherBalance: otherBalanceResponse,
       otherBalanceUsdConvert
     }
 
