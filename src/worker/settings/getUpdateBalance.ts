@@ -9,7 +9,7 @@ const getUpdateBalance = async (api: AxiosInstance): Promise<boolean> => {
     console.log(error.message)
   })
 
-  console.log(apiResponse)
+  // console.log(apiResponse)
 
   if(!apiResponse){
     return false
