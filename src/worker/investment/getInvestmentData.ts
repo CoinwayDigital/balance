@@ -22,10 +22,10 @@ const getInvestmentData = async (api: AxiosInstance, usdBrlPrice: number): Promi
     }
   }
 
-  console.log({
-    bookAmountUsd,
-    bookAmountBrl
-  })
+  // console.log({
+  //   bookAmountUsd,
+  //   bookAmountBrl
+  // })
 
   // Antigo calculo baseado no banco de dados de investimento, que foi descontinuado
   // const investmentsResponse = await api.get('investment/select?status=active')
