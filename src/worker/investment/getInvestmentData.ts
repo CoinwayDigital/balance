@@ -17,15 +17,17 @@ const getInvestmentData = async (api: AxiosInstance, usdBrlPrice: number): Promi
 
   for (let i = 0; i < bookResponse.length; i++) {
     if (bookResponse[i].ratio && bookResponse[i].usdRatioPrice && bookResponse[i].usdBrlPrice) {
-      bookAmountBrl = bookAmountBrl + (bookResponse[i].ratio / (bookResponse[i].usdRatioPrice / bookResponse[i].usdBrlPrice))
-      bookAmountUsd = bookAmountUsd + (bookResponse[i].ratio / bookResponse[i].usdRatioPrice)
+      if(bookResponse[i].status === 'active'){
+        if(bookResponse[i].typeRecord === 'investment'){
+            bookAmountBrl = bookAmountBrl + (bookResponse[i].ratio / (bookResponse[i].usdRatioPrice / bookResponse[i].usdBrlPrice))
+            bookAmountUsd = bookAmountUsd + (bookResponse[i].ratio / bookResponse[i].usdRatioPrice)
+        } else if (bookResponse[i].typeRecord === 'withdraw') {
+          bookAmountBrl = bookAmountBrl - (bookResponse[i].ratio / (bookResponse[i].usdRatioPrice / bookResponse[i].usdBrlPrice))
+          bookAmountUsd = bookAmountUsd - (bookResponse[i].ratio / bookResponse[i].usdRatioPrice)
+        }
+      }
     }
   }
-
-  // console.log({
-  //   bookAmountUsd,
-  //   bookAmountBrl
-  // })
 
   // Antigo calculo baseado no banco de dados de investimento, que foi descontinuado
   // const investmentsResponse = await api.get('investment/select?status=active')
