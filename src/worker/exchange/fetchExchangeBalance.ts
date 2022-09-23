@@ -1,6 +1,8 @@
 import { decrypt } from "@src/utils/crypto-js"
+import mailer from "@src/utils/mailer"
 import { AxiosInstance } from "axios"
 import ccxt from 'ccxt'
+import dayjs from "dayjs"
 
 const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api: AxiosInstance) => {
   const exchange = new ccxt[exchangeSelected]({
@@ -13,10 +15,34 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
     .then(response => {
       return response
     })
-    .catch(error => {
+    .catch(async error => {
       console.log(error.message)
-      return null
+      console.log(`[araucaria-balance] ${exchangeSelected} - Error to get exchange data, get old data in last balance ...`)
+      const lastBalance = await api.get('balance/select?orderBy=desc&limit=1')
+      .then(response => response.data[0])
+      .catch(error => {
+        console.log(error.message)
+      })
+  
+      if(lastBalance){
+        if(lastBalance.balance){
+          if(lastBalance.balance.exchanges){
+            if(lastBalance.balance.exchanges[exchangeSelected]){
+              const mailerResponse = await mailer(
+                'ti@araucariacapital.com.br',
+                `Alerta técnico - Araucária Capital - Serviço: Balance - Erro API ${exchangeSelected} ${dayjs().format('DD/MM/YYYY hh:mm')}`,
+                `Erro ao puxar dados da exchange ${exchangeSelected}, foi utilizando os dados salvos anteriormente no Balance`
+              )
+              console.log(`[araucaria-balance] ${exchangeSelected} - Error to get exchange data, restore old data in balance with success!`)
+              console.log(mailerResponse)
+              return lastBalance.balance.exchanges[exchangeSelected]
+            }
+          }
+        }
+      } 
     })
+
+    
 
   global.detailedConsole && console.log(`[araucaria-balance] ${exchangeSelected} - Search balance done`)
   global.detailedConsole && console.log('\n')
