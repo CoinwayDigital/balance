@@ -1,4 +1,3 @@
-import mailer from "@src/utils/mailer"
 import { AxiosInstance } from "axios"
 import dayjs from "dayjs"
 
@@ -10,13 +9,12 @@ const getCoinPrice = async (coinGeckoIds: string, symbols: string, api: AxiosIns
     })
     .catch(async error => {
       console.log(error.message)
-      const mailerResponse = await mailer(
-        'ti@araucariacapital.com.br',
-        `Alerta técnico - Araucária Capital - Serviço: Balance - Erro API Coingecko ${dayjs().format('DD/MM/YYYY hh:mm')}`,
-        `Erro ao puxar preço da moeda pela API da Coingecko, endpoint: coin/price?ids=${coinGeckoIds}&vsCurrencies=${symbols}, retorno: ${error.message}`
-      )
-      console.log(mailerResponse)
-      return undefined
+      const mailerResponse = await api.post('sender/email/create', {
+        "to": 'ti@araucariacapital.com.br',
+        "subject": `Alerta técnico - Araucária Capital - Serviço: Balance - Erro API Coingecko ${dayjs().format('DD/MM/YYYY hh:mm')}`,
+        "body": `Erro ao puxar preço da moeda pela API da Coingecko, endpoint: coin/price?ids=${coinGeckoIds}&vsCurrencies=${symbols}, retorno: ${error.message}`
+      })
+      console.log(mailerResponse.data)
     })
 
   if(symbols === 'brl'){

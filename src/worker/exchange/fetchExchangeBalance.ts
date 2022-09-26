@@ -1,5 +1,4 @@
 import { decrypt } from "@src/utils/crypto-js"
-import mailer from "@src/utils/mailer"
 import { AxiosInstance } from "axios"
 import ccxt from 'ccxt'
 import dayjs from "dayjs"
@@ -28,13 +27,13 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
         if(lastBalance.balance){
           if(lastBalance.balance.exchanges){
             if(lastBalance.balance.exchanges[exchangeSelected]){
-              const mailerResponse = await mailer(
-                'ti@araucariacapital.com.br',
-                `Alerta técnico - Araucária Capital - Serviço: Balance - Erro API ${exchangeSelected} ${dayjs().format('DD/MM/YYYY hh:mm')}`,
-                `Erro ao puxar dados da exchange ${exchangeSelected}, foi utilizando os dados salvos anteriormente no Balance`
-              )
+              const mailerResponse = await api.post('sender/email/create', {
+                "to": 'ti@araucariacapital.com.br',
+                "subject": `Alerta técnico - Araucária Capital - Serviço: Balance - Erro API ${exchangeSelected} ${dayjs().format('DD/MM/YYYY hh:mm')}`,
+                "body": `Erro ao puxar dados da exchange ${exchangeSelected}, foi utilizando os dados salvos anteriormente no Balance`
+              })
               console.log(`[araucaria-balance] ${exchangeSelected} - Error to get exchange data, restore old data in balance with success!`)
-              console.log(mailerResponse)
+              console.log(mailerResponse.data)
               return lastBalance.balance.exchanges[exchangeSelected]
             }
           }
