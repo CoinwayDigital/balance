@@ -10,6 +10,7 @@ type TOtherBalance = {
   label: string
   status: TStatus
   amount: number
+  netAmount: number
   currency: string
   obs?: string
 }
@@ -31,19 +32,26 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
   if (usdBrlPrice) {
     let sumUsdAmount = 0
     let sumBrlAmount = 0
+    let sumUsdNetAmount = 0
+    let sumBrlNetAmount = 0
     const otherBalanceUsdConvert = []
     for (let i = 0; i < otherBalanceResponse.length; i++) {
       if (otherBalanceResponse[i].currency === 'brl') {
         sumUsdAmount = (sumUsdAmount + (otherBalanceResponse[i].amount / usdBrlPrice))
         sumBrlAmount = sumBrlAmount + otherBalanceResponse[i].amount
+        sumUsdNetAmount = (sumUsdNetAmount + (otherBalanceResponse[i].netAmount / usdBrlPrice))
+        sumBrlNetAmount = sumBrlNetAmount + otherBalanceResponse[i].netAmount
         otherBalanceUsdConvert.push({
           ...otherBalanceResponse[i],
           amount: otherBalanceResponse[i].amount / usdBrlPrice,
+          netAmount: otherBalanceResponse[i].netAmount / usdBrlPrice,
           currency: 'usd'
         })
       } else if (otherBalanceResponse[i].currency === 'usd') {
         sumUsdAmount = sumUsdAmount + otherBalanceResponse[i].amount
         sumBrlAmount = (sumBrlAmount + (otherBalanceResponse[i].amount * usdBrlPrice))
+        sumUsdNetAmount = sumUsdNetAmount + otherBalanceResponse[i].amount
+        sumBrlNetAmount = (sumBrlNetAmount + (otherBalanceResponse[i].amount * usdBrlPrice))
         otherBalanceUsdConvert.push(otherBalanceResponse[i])
       }
     }
@@ -54,6 +62,10 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
       currencyAmount: {
         usd: sumUsdAmount,
         brl: sumBrlAmount
+      },
+      currencyNetAmount: {
+        usd: sumUsdNetAmount,
+        brl: sumBrlNetAmount
       },
       otherBalance: otherBalanceResponse,
       otherBalanceUsdConvert

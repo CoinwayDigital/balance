@@ -20,6 +20,7 @@ const getOtherBalance = async (api: AxiosInstance): Promise<any> => {
       label: apiResponse[i].label,
       status: apiResponse[i].status,
       amount: apiResponse[i].amount,
+      netAmount: apiResponse[i].netAmount,
       currency: apiResponse[i].currency,
       obs: apiResponse[i].obs
     })
