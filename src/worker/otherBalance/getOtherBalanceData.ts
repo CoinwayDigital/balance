@@ -50,8 +50,8 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
       } else if (otherBalanceResponse[i].currency === 'usd') {
         sumUsdAmount = sumUsdAmount + otherBalanceResponse[i].amount
         sumBrlAmount = (sumBrlAmount + (otherBalanceResponse[i].amount * usdBrlPrice))
-        sumUsdNetAmount = sumUsdNetAmount + otherBalanceResponse[i].amount
-        sumBrlNetAmount = (sumBrlNetAmount + (otherBalanceResponse[i].amount * usdBrlPrice))
+        sumUsdNetAmount = sumUsdNetAmount + otherBalanceResponse[i].netAmount
+        sumBrlNetAmount = (sumBrlNetAmount + (otherBalanceResponse[i].netAmount * usdBrlPrice))
         otherBalanceUsdConvert.push(otherBalanceResponse[i])
       }
     }
