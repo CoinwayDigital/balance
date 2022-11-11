@@ -11,17 +11,6 @@ const setBalance = async (
   investmentsAmountBrl?: number,
   cashbookReport?: any): Promise<any> => {
 
-    console.log({
-      balance: balance,
-      solanaBalance: solanaBalance,
-      otherBalance: otherBalance,
-      priceUsdBrl: priceUsdBrl,
-      priceUsdRatio: priceUsdRatio,
-      investmentsAmountUsd: investmentsAmountUsd,
-      investmentsAmountBrl: investmentsAmountBrl,
-      book: cashbookReport
-    })
-
   const apiResponse = await api.post('balance/create', {
     balance: balance,
     solanaBalance: solanaBalance,

@@ -1,20 +1,20 @@
+import sleep from '@src/utils/sleep'
+import { AxiosInstance } from 'axios'
 import coinwayApi from '../services/axios/api'
-import loginApi from '../utils/authenticateApi/login'
 import checkerExpire from '../utils/authenticateApi/checkerExpire'
-import getExchangeData from './exchange/getExchangeData'
+import loginApi from '../utils/authenticateApi/login'
+import setBalance from './api/setBalance'
+import setUsdValues from './balance/setUsdValues'
+import getCoinSelect from './coin/getCoinSelect'
 import fetchExchangeBalance from './exchange/fetchExchangeBalance'
 import getExchangeCoinPrice from './exchange/getExchangeCoinPrice'
-import getCoinSelect from './coin/getCoinSelect'
-import setUsdValues from './balance/setUsdValues'
-import { AxiosInstance } from 'axios'
+import getExchangeData from './exchange/getExchangeData'
 import getExchangeKeys from './exchange/getExchangeKeys'
-import sleep from '@src/utils/sleep'
-import setBalance from './api/setBalance'
 // import getSolanaBalance from './solana/getSolanaBalance'
+import getBookReport from './book/getBookReport'
+import getInvestmentData from './investment/getInvestmentData'
 import getOtherBalanceData from './otherBalance/getOtherBalanceData'
 import getPriceUsdBrl from './priceUsdBrl/getPriceUsdBrl'
-import getInvestmentData from './investment/getInvestmentData'
-import getBookReport from './book/getBookReport'
 import getPriceUsdRatio from './priceUsdRatio/getPriceUsdRatio'
 import getUpdateBalance from './settings/getUpdateBalance'
 import setUpdateBalance from './settings/setUpdateBalance'
@@ -24,10 +24,10 @@ global.detailedConsole = false
 const loopLoginTime = 240000
 const loopTriggerUpdateTime = 5000
 
-const getBalance = async (exchangeSelected: string, api: AxiosInstance) => {
+const getBalance = async (exchangeSelected: string, api: AxiosInstance, status: boolean) => {
   const exchangeData = await getExchangeData(exchangeSelected, api)
   const coinList = await getCoinSelect(exchangeSelected, api)
-  let filteredBalance = await fetchExchangeBalance(exchangeData, exchangeSelected, api)
+  let filteredBalance = await fetchExchangeBalance(exchangeData, exchangeSelected, api, status)
   const exchangeCoinPrice = await getExchangeCoinPrice(exchangeSelected, filteredBalance, api)
   // Se ele não conseguir encontrar qualquer valor de saldo em qualquer exchange, é interrompido o loop do balance
   if(exchangeCoinPrice){
@@ -54,7 +54,7 @@ const loopBalance = async () => {
   let usdTotal: number = 0
 
   for (let i = 0; i < exchangeKeys.length; i++) {
-    exchangesBalance[exchangeKeys[i]] = await getBalance(exchangeKeys[i], api)
+    exchangesBalance[exchangeKeys[i]] = await getBalance(exchangeKeys[i], api, status)
 
     if(!exchangesBalance[exchangeKeys[i]]){
       status = false
@@ -133,11 +133,15 @@ const loopTriggerUpdate = async () => {
 }     
 
 const loopNewBalance = async () => {
+  let countLoop = 0
   while (true) {
-    console.log('[araucaria-balance] New Balance - INIT LOOP')
-    await newBalance()
-    console.log('[araucaria-balance] New Balance - END LOOP')
-    await sleep(parseInt(process.env.LOOP))
+    if(countLoop !== 0){
+      console.log('[araucaria-balance] New Balance - INIT LOOP')
+      await newBalance()
+      console.log('[araucaria-balance] New Balance - END LOOP')
+      await sleep(parseInt(process.env.LOOP))
+    }
+    countLoop++
   }
 }
 
@@ -148,11 +152,11 @@ const loopLoginApi = async (isUniqueLoop: boolean) => {
     global.detailedConsole && console.log(`[araucaria-balance] Login Done`)
   } else {
     while (true) {
-      console.log('[araucaria-balance] LOGIN - Init login loop')
-      await sleep(loopLoginTime)
-      console.log(`[araucaria-balance] Login Araucaria API ...`)
-      await loginApi()  
-      console.log(`[araucaria-balance] Login Done`)
+        console.log('[araucaria-balance] LOGIN - Init login loop')
+        await sleep(loopLoginTime)
+        console.log('[araucaria-balance] Login Araucaria API ...')
+        await loginApi()  
+        console.log('[araucaria-balance] Login Done')
     }
   }
 }

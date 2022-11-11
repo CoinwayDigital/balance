@@ -10,7 +10,7 @@ const getPriceUsdRatio = async (api: AxiosInstance) => {
       console.log(error.message)
   })
 
-  console.log(bookReport)
+  // console.log(bookReport)
 
   return bookReport.usdRatioPrice
 }
