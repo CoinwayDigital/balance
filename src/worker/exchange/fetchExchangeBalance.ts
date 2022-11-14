@@ -48,6 +48,11 @@ const getLastBalance = async (exchangeSelected: string, api: AxiosInstance) => {
 
 const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api: AxiosInstance, status: boolean) => {
 
+  if(exchangeData.status === 'disabled'){
+    console.log(`[araucaria-balance] ${exchangeSelected} - Exchange Disabled`)
+    return {}
+  }
+
   const settingLockExchanges = await getLockExchanges(api)
 
   const exchange = new ccxt[exchangeSelected]({
