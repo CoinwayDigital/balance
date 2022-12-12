@@ -16,6 +16,7 @@ import getInvestmentData from './investment/getInvestmentData'
 import getOtherBalanceData from './otherBalance/getOtherBalanceData'
 import getPriceUsdBrl from './priceUsdBrl/getPriceUsdBrl'
 import getPriceUsdRatio from './priceUsdRatio/getPriceUsdRatio'
+import getReportOtherBalance from './reportTracker/getReportOtherBalance'
 import getUpdateBalance from './settings/getUpdateBalance'
 import setUpdateBalance from './settings/setUpdateBalance'
 
@@ -46,6 +47,9 @@ const loopBalance = async () => {
   await checkerExpire() // Check authentication
 
   let status = true
+
+  // Verificando o rastreamento de relatórios, para os valores dos Other Balances
+  await getReportOtherBalance(api)
 
   // Inicio do levantamento de Balance das Exchanges
   const exchangeKeys = await getExchangeKeys(api)
