@@ -93,11 +93,13 @@ const fetchExchangeBalance = async (exchangeData, exchangeSelected: string, api:
     if(balanceList){
       console.log(`[araucaria-balance] ${exchangeSelected} - Filter non zero balances ...`)
       for (const key in balanceList) {
-        if (balanceList.total[key] > 0) {
-          filteredBalance[key] = {
-            total: balanceList.total[key],
-            free: balanceList.free[key],
-            used: balanceList.used[key]
+        if (balanceList.total) {
+          if(balanceList.total[key] > 0){
+            filteredBalance[key] = {
+              total: balanceList.total[key],
+              free: balanceList.free[key],
+              used: balanceList.used[key]
+            }
           }
         }
       }

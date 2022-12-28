@@ -42,7 +42,6 @@ const getBalance = async (exchangeSelected: string, api: AxiosInstance, status: 
 }
 
 const loopBalance = async () => {
-  console.log('\n')
   const api = coinwayApi()
   await checkerExpire() // Check authentication
 
@@ -143,6 +142,7 @@ const loopNewBalance = async () => {
       console.log('[araucaria-balance] New Balance - INIT LOOP')
       await newBalance()
       console.log('[araucaria-balance] New Balance - END LOOP')
+      console.log('\n')
       await sleep(parseInt(process.env.LOOP))
     }
     countLoop++
