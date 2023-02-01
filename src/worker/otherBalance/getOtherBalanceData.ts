@@ -22,7 +22,7 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
   console.log('[araucaria-balance] binance - Get USD/BRL price ...')
   const usdBrlPrice = await getCoinPrice('tether', 'brl', api)
     .then(response => {
-      return response.tether.brl
+      return response.tether.brl * 1.01
     })
     .catch(error => {
       console.log(error.message)
@@ -36,6 +36,13 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
     let sumBrlNetAmount = 0
     const otherBalanceUsdConvert = []
     for (let i = 0; i < otherBalanceResponse.length; i++) {
+
+      console.log({
+        total: sumUsdAmount,
+        sumUsdAmount: otherBalanceResponse[i].amount,
+        usdBrlPrice: usdBrlPrice
+      })
+
       if (otherBalanceResponse[i].currency === 'brl') {
         sumUsdAmount = (sumUsdAmount + (otherBalanceResponse[i].amount / usdBrlPrice))
         sumBrlAmount = sumBrlAmount + otherBalanceResponse[i].amount
