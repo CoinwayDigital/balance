@@ -29,37 +29,35 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
       return null
     })
 
+  // Filtrando os Other Balances ativos
+  const otherBalanceActive = otherBalanceResponse.filter(o => o.status === 'active')
+
   if (usdBrlPrice) {
     let sumUsdAmount = 0
     let sumBrlAmount = 0
     let sumUsdNetAmount = 0
     let sumBrlNetAmount = 0
     const otherBalanceUsdConvert = []
-    for (let i = 0; i < otherBalanceResponse.length; i++) {
-
-      console.log({
-        total: sumUsdAmount,
-        sumUsdAmount: otherBalanceResponse[i].amount,
-        usdBrlPrice: usdBrlPrice
-      })
-
-      if (otherBalanceResponse[i].currency === 'brl') {
-        sumUsdAmount = (sumUsdAmount + (otherBalanceResponse[i].amount / usdBrlPrice))
-        sumBrlAmount = sumBrlAmount + otherBalanceResponse[i].amount
-        sumUsdNetAmount = (sumUsdNetAmount + (otherBalanceResponse[i].netAmount / usdBrlPrice))
-        sumBrlNetAmount = sumBrlNetAmount + otherBalanceResponse[i].netAmount
-        otherBalanceUsdConvert.push({
-          ...otherBalanceResponse[i],
-          amount: otherBalanceResponse[i].amount / usdBrlPrice,
-          netAmount: otherBalanceResponse[i].netAmount / usdBrlPrice,
-          currency: 'usd'
-        })
-      } else if (otherBalanceResponse[i].currency === 'usd') {
-        sumUsdAmount = sumUsdAmount + otherBalanceResponse[i].amount
-        sumBrlAmount = (sumBrlAmount + (otherBalanceResponse[i].amount * usdBrlPrice))
-        sumUsdNetAmount = sumUsdNetAmount + otherBalanceResponse[i].netAmount
-        sumBrlNetAmount = (sumBrlNetAmount + (otherBalanceResponse[i].netAmount * usdBrlPrice))
-        otherBalanceUsdConvert.push(otherBalanceResponse[i])
+    for (let i = 0; i < otherBalanceActive.length; i++) {
+      if(otherBalanceActive[i].status === 'active'){
+        if (otherBalanceActive[i].currency === 'brl') {
+          sumUsdAmount = (sumUsdAmount + (otherBalanceActive[i].amount / usdBrlPrice))
+          sumBrlAmount = sumBrlAmount + otherBalanceActive[i].amount
+          sumUsdNetAmount = (sumUsdNetAmount + (otherBalanceActive[i].netAmount / usdBrlPrice))
+          sumBrlNetAmount = sumBrlNetAmount + otherBalanceActive[i].netAmount
+          otherBalanceUsdConvert.push({
+            ...otherBalanceActive[i],
+            amount: otherBalanceActive[i].amount / usdBrlPrice,
+            netAmount: otherBalanceActive[i].netAmount / usdBrlPrice,
+            currency: 'usd'
+          })
+        } else if (otherBalanceActive[i].currency === 'usd') {
+          sumUsdAmount = sumUsdAmount + otherBalanceActive[i].amount
+          sumBrlAmount = (sumBrlAmount + (otherBalanceActive[i].amount * usdBrlPrice))
+          sumUsdNetAmount = sumUsdNetAmount + otherBalanceActive[i].netAmount
+          sumBrlNetAmount = (sumBrlNetAmount + (otherBalanceActive[i].netAmount * usdBrlPrice))
+          otherBalanceUsdConvert.push(otherBalanceActive[i])
+        }
       }
     }
 
@@ -74,7 +72,7 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
         usd: sumUsdNetAmount,
         brl: sumBrlNetAmount
       },
-      otherBalance: otherBalanceResponse,
+      otherBalance: otherBalanceActive,
       otherBalanceUsdConvert
     }
 
