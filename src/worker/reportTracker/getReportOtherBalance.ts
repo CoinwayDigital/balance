@@ -11,7 +11,7 @@ const getReportOtherBalance = async (api: AxiosInstance) => {
   console.log('[araucaria-balance] Update report tracking on Other Balance')
 
   const minHourFilter = 18
-  const maxHourFilter = 20
+  const maxHourFilter = 21
   const time = dayjs().tz(timezoneLocale, true)
   const hour = time.hour()
 
