@@ -10,8 +10,17 @@ const timezoneLocale = "America/Chicago"
 const getReportOtherBalance = async (api: AxiosInstance) => {
   console.log('[araucaria-balance] Update report tracking on Other Balance')
 
-  const minHourFilter = 21
-  const maxHourFilter = 24
+  const apiResponseSettings = await api.get('settings/select')
+  .then(response => {
+    return response.data
+  })
+  .catch(error => {
+    console.log(error.message)
+  })
+
+  const minHourFilter = apiResponseSettings.minTimeTrackingReport ? apiResponseSettings.minTimeTrackingReport : 21
+  const maxHourFilter = apiResponseSettings.maxTimeTrackingReport ? apiResponseSettings.maxTimeTrackingReport : 24
+
   const time = dayjs().tz(timezoneLocale, true)
   const hour = time.hour()
 
