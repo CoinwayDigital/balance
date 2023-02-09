@@ -4,7 +4,8 @@ import dayjs from "dayjs"
 const getPriceUsdBrl = async (api: AxiosInstance) => {
   const coinPrices = await api.get(`coin/price?ids=tether&vsCurrencies=brl`)
     .then(response => {
-      return (response.data.tether.brl * 1.01)
+      // return (response.data.tether.brl * 1.01)
+      return response.data.tether.brl
     })
     .catch(async error => {
       console.log(error.message)

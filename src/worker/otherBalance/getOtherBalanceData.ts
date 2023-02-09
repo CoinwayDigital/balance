@@ -22,7 +22,8 @@ const getOtherBalanceData = async (api: AxiosInstance) => {
   console.log('[araucaria-balance] binance - Get USD/BRL price ...')
   const usdBrlPrice = await getCoinPrice('tether', 'brl', api)
     .then(response => {
-      return response.tether.brl * 1.01
+      // return response.tether.brl * 1.01
+      return response.tether.brl
     })
     .catch(error => {
       console.log(error.message)
