@@ -9,6 +9,7 @@ type TOtherBalance = {
   date: Date
   label: string
   status: TStatus
+  categoryId: string
   amount: number
   netAmount: number
   currency: string
