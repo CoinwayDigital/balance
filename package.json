@@ -5,6 +5,9 @@
   "repository": "git@github.com:CoinwayDigital/api.git",
   "author": "Victor Lima <victorandradelima@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node-modules --no-notify src/worker/server.ts",
     "start": "node -r dotenv/config -r tsconfig-paths/register dist/worker/server.js",
