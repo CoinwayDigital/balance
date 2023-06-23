@@ -5,9 +5,13 @@
   "repository": "git@github.com:CoinwayDigital/api.git",
   "author": "Victor Lima <victorandradelima@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node-modules --no-notify src/server.ts",
-    "start": "pm2 start ecosystem.config.js",
+    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node-modules --no-notify src/worker/server.ts",
+    "start": "node -r dotenv/config dist/worker/server.js",
+    "pm2": "pm2 start ecosystem.config.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "test": "jest"
   },
@@ -17,8 +21,12 @@
     "@babel/node": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
+    "@types/axios": "^0.14.0",
+    "@types/crypto-js": "^4.0.2",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
+    "@types/nodemailer": "^6.4.5",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^5.0.0",
     "babel-plugin-module-resolver": "^4.1.0",
@@ -28,12 +36,20 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "jest": "^27.2.5",
+    "prisma": "3.6.0",
     "ts-jest": "^27.0.5",
     "ts-node-dev": "^1.1.8",
     "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "@prisma/client": "3.6.0",
+    "axios": "^0.24.0",
+    "ccxt": "^1.95.43",
+    "crypto-js": "^4.1.1",
+    "dayjs": "^1.10.7",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "nodemailer": "^6.7.8"
   }
 }
